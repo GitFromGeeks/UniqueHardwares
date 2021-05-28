@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:uniquehardwares/OrderNow.dart';
 import 'Login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -8,78 +9,89 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+class ListItem {
+  int value;
+  String name;
+
+  ListItem(this.value, this.name);
+}
+
 class _HomeState extends State<Home> {
   int cindex = 0;
   List<String> hardwares = ['D-nut', 'Jipson', 'Bolt'];
   late String filterby;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text(
+                "UNIQUE HARDWARES",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.blueGrey,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Login()));
+                },
+                icon: Icon(
+                  Icons.admin_panel_settings,
+                  color: Colors.black,
+                ))
+          ],
+        ),
+        body: Stack(
           children: [
-            Text(
-              "UNIQUE HARDWARES",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15,
+            Offstage(
+              offstage: cindex != 1,
+              child: TickerMode(
+                enabled: cindex == 1,
+                child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  home: contact(),
+                ),
+              ),
+            ),
+            Offstage(
+              offstage: cindex != 0,
+              child: TickerMode(
+                enabled: cindex == 0,
+                child: MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  home: catalog(),
+                ),
               ),
             ),
           ],
         ),
-        backgroundColor: Colors.blueGrey,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => Login()));
-              },
-              icon: Icon(
-                Icons.admin_panel_settings,
-                color: Colors.black,
-              ))
-        ],
-      ),
-      body: Stack(
-        children: [
-          Offstage(
-            offstage: cindex != 1,
-            child: TickerMode(
-              enabled: cindex == 1,
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: contact(),
-              ),
-            ),
-          ),
-          Offstage(
-            offstage: cindex != 0,
-            child: TickerMode(
-              enabled: cindex == 0,
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                home: catalog(),
-              ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: cindex,
-        backgroundColor: Colors.blueGrey,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.menu_outlined), label: "Shop"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.contacts_rounded), label: "Contact")
-        ],
-        selectedItemColor: Colors.white,
-        onTap: (index) {
-          setState(() {
-            cindex = index;
-          });
-        },
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: cindex,
+          backgroundColor: Colors.blueGrey,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.menu_outlined), label: "Shop"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.contacts_rounded), label: "Contact")
+          ],
+          selectedItemColor: Colors.white,
+          onTap: (index) {
+            setState(() {
+              cindex = index;
+            });
+          },
+        ),
       ),
     );
   }
@@ -262,29 +274,49 @@ class _HomeState extends State<Home> {
   }
 
   Widget catalog() {
-    return Stack(
-      children: [
-        // DropdownButton(
-        //   hint: Text(
-        //     'Filter . . .',
-        //     style: TextStyle(fontSize: 30.0),
-        //   ),
-        //   value: filterby,
-        //   icon: Icon(Icons.arrow_drop_down),
-        //   iconSize: 42,
-        //   underline: SizedBox(),
-        //   isExpanded: true,
-        //   onChanged: (newValue) {
-        //     // setState(() {
-        //     //   bcodeController1.text = newValue;
-        //     // });
-        //   },
-        //   items: hardwares.map((e) {
-        //     return DropdownMenuItem(child: Text(e), value: e);
-        //   }).toList(),
-        // ),
-        SingleChildScrollView(
-          child: Column(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(15.0),
+              hintText: 'Search here...',
+            ),
+            onChanged: (string) {
+              // _debouncer.run(() {
+              //   setState(() {
+              //     filterData = data
+              //         .where((u) => (u['model']
+              //                 .toLowerCase()
+              //                 .contains(string.toLowerCase()) ||
+              //             u['mobile']
+              //                 .toLowerCase()
+              //                 .contains(string.toLowerCase())))
+              //         .toList();
+              //   });
+              // });
+            },
+          ),
+          // DropdownButton(
+          //   hint: Text(
+          //     'Filter . . .',
+          //     style: TextStyle(fontSize: 30.0),
+          //   ),
+          //   value: filterby,
+          //   icon: Icon(Icons.arrow_drop_down),
+          //   iconSize: 42,
+          //   underline: SizedBox(),
+          //   isExpanded: true,
+          //   onChanged: (newValue) {
+          //     // setState(() {
+          //     //   bcodeController1.text = newValue;
+          //     // });
+          //   },
+          //   items: hardwares.map((e) {
+          //     return DropdownMenuItem(child: Text(e), value: e);
+          //   }).toList(),
+          // ),
+          Column(
             children: [
               Card(
                 child: Container(
@@ -297,7 +329,12 @@ class _HomeState extends State<Home> {
                       Row(
                         children: [
                           ElevatedButton(
-                              onPressed: () {}, child: Text("Order Now")),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        OrderNow()));
+                              },
+                              child: Text("Order Now")),
                           Padding(padding: EdgeInsets.only(right: 10.0)),
                           Text(
                             "Penhead",
@@ -483,9 +520,9 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ],
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

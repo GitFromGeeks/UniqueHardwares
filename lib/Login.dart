@@ -7,6 +7,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController nameController = new TextEditingController();
+  final TextEditingController passwordController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +67,7 @@ class _LoginState extends State<Login> {
     return Padding(
       padding: EdgeInsets.all(8),
       child: TextFormField(
+        controller: nameController,
         keyboardType: TextInputType.name,
         decoration: InputDecoration(
             prefixIcon: Icon(
@@ -80,6 +83,7 @@ class _LoginState extends State<Login> {
     return Padding(
       padding: EdgeInsets.all(8),
       child: TextFormField(
+        controller: passwordController,
         keyboardType: TextInputType.visiblePassword,
         obscureText: true,
         decoration: InputDecoration(
@@ -91,6 +95,9 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  final snackBar =
+      SnackBar(content: Text("Invalid !", style: TextStyle(color: Colors.red)));
 
   Widget _loginButton() {
     return Row(
@@ -110,8 +117,13 @@ class _LoginState extends State<Login> {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => Admin()));
+              if (nameController.text == "Naved" &&
+                  passwordController.text == "naved@123") {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => Admin()));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
             },
           ),
         )

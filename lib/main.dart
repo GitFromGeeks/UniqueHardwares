@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       home: Home(),
       routes: {
         '/admin': (context) => Admin(),
+        '/home': (context) => Home(),
       },
     );
   }
